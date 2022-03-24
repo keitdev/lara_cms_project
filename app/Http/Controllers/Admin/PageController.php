@@ -8,6 +8,10 @@ use App\Models\Page;
 
 class PageController extends Controller
 {
+    public function __construct() {
+        $this->middleware('admin');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +26,7 @@ class PageController extends Controller
                 return '<a onclick="editForm('. $page->id .')" class="btn btn-primary btn-xs text-white"><i class="fa fa-edit"></i> Edit</a>' . ' <a onclick="deleteData('. $page->id .')" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash"></i> Delete</a>';
             })->make(true);
         }
-        return view('admin.pages.page');
+        return view('admin.pages.index');
     }
 
     /**
@@ -32,7 +36,7 @@ class PageController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.pages.create');
     }
 
     /**
@@ -88,6 +92,7 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $page = Page::find($id);
+        $page->delete();
     }
 }

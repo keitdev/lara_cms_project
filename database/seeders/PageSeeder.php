@@ -18,6 +18,8 @@ class PageSeeder extends Seeder
     {
         $admin = User::find(1);
 
+        Page::truncate();
+
         $admin->pages()->saveMany([
             new Page([
                 'title' => 'About',
