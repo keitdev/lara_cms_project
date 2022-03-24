@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Page;
 
 class PageController extends Controller
 {
@@ -14,7 +15,14 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        if(request()->ajax()) {
+            return datatables()->of(Page::all())
+            ->addIndexColumn()
+            ->addColumn('action', function($page) {
+                return '<a onclick="editForm('. $page->id .')" class="btn btn-primary btn-xs text-white"><i class="fa fa-edit"></i> Edit</a>' . ' <a onclick="deleteData('. $page->id .')" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash"></i> Delete</a>';
+            })->make(true);
+        }
+        return view('admin.pages.page');
     }
 
     /**
