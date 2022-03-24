@@ -20,3 +20,15 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Protected by Admin Portal 
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'admin']], function() {
+    Route::resources([
+        'post' => PostController::class,
+        'tag' => TagController::class,
+        'categorie' => CategorieController::class,
+        'page' => PageController::class,
+        'comment' => CommentController::class,
+        'user' => UserController::class,
+    ]);
+});
