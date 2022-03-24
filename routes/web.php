@@ -23,6 +23,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Protected by Admin Portal 
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'admin']], function() {
+    Route::resource('dashboard', DashboardController::class)->only([
+        'index'
+    ]);
     Route::resources([
         'post' => PostController::class,
         'tag' => TagController::class,
