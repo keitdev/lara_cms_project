@@ -17,3 +17,22 @@ Laravel is a free, open-source PHP web framework, created by Taylor Otwell and i
     <li><code>php artisan db:seed</code></li>
     <li><code>php artisan serve</code></li>
 </ol>
+
+## About this CMS Application
+
+A content management system is a computer software used to manage the creation and modification of digital content. A CMS is typically used for enterprise content management and web content management.
+
+<ol>
+    <li>
+        <p>Manage Post</p>
+    </li>
+    <li>
+        <p>Manage Page</p>
+    </li>
+    <li>
+        <p>Manage Comment</p>
+    </li>
+    <li>
+        <p>Manage User and Role User</p>
+    </li>
+</ol>
