@@ -87,9 +87,9 @@ class PageController extends Controller
         $page->title = $request->title;
         $page->url = $request->url;
         $page->content = $request->content;
-        $mcat->save();
+        $page->save();
 
-        return response()->json($page);
+        //return response()->json($page);
     }
 
     /**

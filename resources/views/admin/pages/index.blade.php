@@ -51,22 +51,20 @@
         <x-slot:title>
             Edit Page
         </x-slot>
-        <form method="POST" autocomplete="off">
-            @csrf
+            {{ method_field('POST') }}
             <input type="hidden" class="form-control" id="id">
             <div class="mb-3">
                 <label class="form-label">Title</label>
-                <input type="text" class="form-control" id="edit_title">
+                <input type="text" class="form-control" name="title" id="edit_title">
             </div>
             <div class="mb-3">
                 <label class="form-label">URL</label>
-                <input type="text" class="form-control" id="edit_url">
+                <input type="text" class="form-control" name="url" id="edit_url">
             </div>
             <div class="mb-3">
                 <label class="form-label">Content</label>
-                <textarea class="form-control" id="edit_content" rows="5"></textarea>
+                <textarea class="form-control" name="content" id="edit_content" rows="5"></textarea>
             </div>
-        </form>
         <x-slot:text>
             Update Page
         </x-slot>
@@ -100,6 +98,7 @@
 
         function editForm(id) {
 			$('#edit_page form')[0].reset();
+            $('input[name=_method]').val('PATCH');
 			$.ajax({
 				url:"{{ url('admin/page') }}" + '/' + id + "/edit",
 				type: "GET",
@@ -114,27 +113,37 @@
 			})
         }
 
-        $('#btnedit').on('submit', function(e) {
-            if (!e.isDefaultPrevented()) {
-                var id = $('#id').val();
-                $.ajax({
-                    url: "{{ url('admin/page') }}" + '/' + id,
-                    type: "POST",
-                    data: $('#edit_page form').serialize(),
+        $(function() {
+            $('#edit_page form').on('submit', function(e) {
+                if (!e.isDefaultPrevented()) {
+                    var id = $('#id').val();
+                    $.ajax({
+                        url: "{{ url('admin/page') }}" + '/' + id,
+                        type: "POST",
+                        data: $('#edit_page form').serialize(),
                         success: function(data) {
                             console.log(data)
-                        $('#edit_page').modal('hide');
-                        table.ajax.reload();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success...',
-                            text: 'Data has been add!',
-                            timer: 1500
-                        });
-                    }
-                });
-            }
-            return false;
+                            $('#edit_page').modal('hide');
+                            table.ajax.reload();
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success...',
+                                text: 'Data has been add!',
+                                timer: 1500
+                            });
+                        },
+                        error: function(data) {
+                            console.log(data)
+                            swal.fire({
+                                title: 'Oops...',
+                                text: "Something went wrong!",
+                                type: "error"
+                            })
+                        }
+                    });
+                }
+                return false;
+            });
         });
 
         function deleteData(id) {
