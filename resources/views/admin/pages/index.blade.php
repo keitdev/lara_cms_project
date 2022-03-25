@@ -47,11 +47,29 @@
         </div>
     </section>
 
-    <x-modal>
+    <x-modal id="edit_page">
         <x-slot:title>
             Edit Page
         </x-slot>
-        <strong>Whoops!</strong> Something went wrong!
+        <form method="POST" autocomplete="off">
+            @csrf
+            <input type="hidden" class="form-control" id="id">
+            <div class="mb-3">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-control" id="edit_title">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">URL</label>
+                <input type="text" class="form-control" id="edit_url">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea class="form-control" id="edit_content" rows="5"></textarea>
+            </div>
+        </form>
+        <x-slot:text>
+            Update Page
+        </x-slot>
     </x-modal>
 
 @endsection
@@ -78,6 +96,45 @@
                 {data: 'content', name: 'content'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
             ],
+        });
+
+        function editForm(id) {
+			$('#edit_page form')[0].reset();
+			$.ajax({
+				url:"{{ url('admin/page') }}" + '/' + id + "/edit",
+				type: "GET",
+				dataType:"json",
+				success:function(data){
+					$('#edit_page').modal('show');
+					$('#id').val(data.id);
+					$('#edit_title').val(data.title);
+					$('#edit_url').val(data.url);
+					$('#edit_content').val(data.content);
+				}
+			})
+        }
+
+        $('#btnedit').on('submit', function(e) {
+            if (!e.isDefaultPrevented()) {
+                var id = $('#id').val();
+                $.ajax({
+                    url: "{{ url('admin/page') }}" + '/' + id,
+                    type: "POST",
+                    data: $('#edit_page form').serialize(),
+                        success: function(data) {
+                            console.log(data)
+                        $('#edit_page').modal('hide');
+                        table.ajax.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success...',
+                            text: 'Data has been add!',
+                            timer: 1500
+                        });
+                    }
+                });
+            }
+            return false;
         });
 
         function deleteData(id) {

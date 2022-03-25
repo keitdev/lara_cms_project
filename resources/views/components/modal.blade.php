@@ -1,4 +1,4 @@
-<div class="modal fade" id="exampleModal">
+<div class="modal fade" {{ $attributes }} data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -10,7 +10,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary btn-sm">Save changes</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnedit">{{ $text }}</button>
             </div>
         </div>
     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use App\Models\Page;
 
 class PageController extends Controller
@@ -69,7 +70,8 @@ class PageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $page = Page::where('id', $id)->first();
+        return response()->json($page);
     }
 
     /**
@@ -81,7 +83,13 @@ class PageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $page = Page::find($id);
+        $page->title = $request->title;
+        $page->url = $request->url;
+        $page->content = $request->content;
+        $mcat->save();
+
+        return response()->json($page);
     }
 
     /**
