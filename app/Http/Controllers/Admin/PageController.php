@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\DB;
 use App\Models\Page;
 
 class PageController extends Controller
@@ -21,7 +22,11 @@ class PageController extends Controller
     public function index()
     {
         if(request()->ajax()) {
-            return datatables()->of(Page::all())
+            $page = DB::table('users')
+                ->join('pages', 'users.id', '=', 'pages.user_id')
+                ->select('pages.*', 'users.name')
+                ->get();
+            return datatables()->of($page)
             ->addIndexColumn()
             ->addColumn('action', function($page) {
                 return '<a onclick="editForm('. $page->id .')" class="btn btn-primary btn-xs text-white"><i class="fa fa-edit"></i> Edit</a>' . ' <a onclick="deleteData('. $page->id .')" class="btn btn-danger btn-xs text-white"><i class="fa fa-trash"></i> Delete</a>';
@@ -48,7 +53,14 @@ class PageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $page = new Page;
+        $page->title = $request->title;
+        $page->url = $request->url;
+        $page->content = $request->content;
+        $page->user_id = $request->user_id;
+        $page->save();
+
+        return response()->json($page);
     }
 
     /**

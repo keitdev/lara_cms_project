@@ -29,7 +29,9 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-12 col-lg-6">
-                                        <form action="" method="POST" autocomplete="off">
+                                        <form method="POST" autocomplete="off">
+                                            @csrf
+                                            <input type="hidden" value="{{ Auth::user()->id }}" id="user_id">
                                             <div class="form-group">
                                                 <label>Title</label>
                                                 <input type="text" class="form-control" id="title">
@@ -42,7 +44,7 @@
                                                 <label>Content</label>
                                                 <textarea class="form-control" id="content" rows="5"></textarea>
                                             </div>
-                                            <button type="button" class="btn btn-success btn-sm" id="btnsave">Publish</button>
+                                            <button type="submit" class="btn btn-success btn-sm">Publish</button>
                                         </form>
                                     </div>
                                 </div>
@@ -63,8 +65,41 @@
             }
         });
 
-        $('#btnsave').click(function() {
-            
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            var title = $('#title').val();
+            var url = $('#url').val();
+            var content = $('#content').val();
+            var user_id = $('#user_id').val();
+            $.ajax({
+                url: "{{ url('admin/page') }}",
+                type: "POST",
+                data: {
+                    title: title,
+                    url: url,
+                    content: content,
+                    user_id: user_id
+                },
+                success: function(data) {
+                    console.log(data)
+                    $('form')[0].reset();
+                    swal.fire({
+                        title: 'Success!',
+                        text: "Data has been inserted!",
+                        type: "success",
+                        timer: '1500'
+                    })
+                },
+                error: function(data) {
+                    console.log(data)
+                    swal.fire({
+                        title: 'Oops...',
+                        text: "Something went wrong!",
+                        type: "error",
+                        timer: '1500'
+                    })
+                }
+            });
         });
     </script>
 @endsection
